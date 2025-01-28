@@ -149,6 +149,10 @@ fn calc(p: vec3f, seed: f32) -> f32 {
     return (tet[0].a + tet[1].a + tet[2].a + tet[3].a) / 4;
 }
 
+fn getColor(alti: f32) -> vec4f {
+    return vec4f(vec3f(colorMap[u32(alti * 256)]) / 256, 1.0);
+}
+
 const PI: f32 = 3.14159265358979323846264338327950288;
 
 @fragment
@@ -164,5 +168,5 @@ fn fragment_main(@location(0) uv: vec2f) -> @location(0) vec4f {
         sin(lat),
     ), PI+7);
     //return vec4f(x/360, (y+90)/180, 0.0, 1.0);
-    return vec4f(alti, alti, alti, 1.0);
+    return getColor(alti);
 }
