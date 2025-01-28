@@ -1,5 +1,5 @@
-// @ts-types="https://denopkg.com/gnlow/lilgpu@9637b05/browser.ts"
-import { initCanvas, d } from "https://esm.sh/gh/gnlow/lilgpu@9637b05/browser.ts"
+// @ts-types="https://denopkg.com/gnlow/lilgpu@e56c15e/browser.ts"
+import { initCanvas, d } from "https://esm.sh/gh/gnlow/lilgpu@e56c15e/browser.ts"
 
 import { lefebvre } from "./src/ColorMap.ts"
 
@@ -13,7 +13,10 @@ const g = await initCanvas({
     layout: {
         colorMap: { uniform:
             d.arrayOf(d.vec3u, 256)
-        }
+        },
+        zoom: { uniform:
+            d.f32
+        },
     },
 })
 
@@ -23,4 +26,13 @@ g.buffers.colorMap.write(
     )
 )
 
-g.draw(4)
+let zoom = 1
+g.buffers.zoom.write(zoom)
+
+const tick = () => new Promise(requestAnimationFrame)
+
+while (true) {
+    await tick()
+    g.buffers.zoom.write(zoom *= 1.01)
+    g.draw(4)
+}

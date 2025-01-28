@@ -102,7 +102,7 @@ fn calc(p: vec3f, seed: f32) -> f32 {
         ), seed+3),
     );
 
-    for (var depth=0; depth<25; depth++) {
+    for (var depth=0; depth<40; depth++) {
         let i = longestEdge(tet);
         let v1 = tet[i[0]];
         let v2 = tet[i[1]];
@@ -157,8 +157,8 @@ const PI: f32 = 3.14159265358979323846264338327950288;
 
 @fragment
 fn fragment_main(@location(0) uv: vec2f) -> @location(0) vec4f {
-    let x = uv.x * 360;
-    let y = uv.y * 180 - 90;
+    let x = (uv.x * 360 - 205.5) / zoom + 205.5;
+    let y = (uv.y * 180 - 90 - 8) / zoom + 8;
     // let rand = fract(sin(uv.x * 12.9898 + uv.y * 78.233) * 43758.5453);
     let long = x * PI / 180;
     let lat = y * PI / 180;
