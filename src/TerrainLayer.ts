@@ -3,7 +3,8 @@ import { Layer, FrameState } from "./deps.ts"
 import { initCanvas, d } from "https://esm.sh/gh/gnlow/lilgpu@0535935/browser.ts"
 import { lefebvre } from "./ColorMap.ts"
 
-const shader = await fetch("src/main.wgsl").then(X => X.text())
+const vertShader = await fetch("src/main.vert").then(X => X.text())
+const fragShader = await fetch("src/main.frag").then(X => X.text())
 
 export class TerrainLayer extends Layer {
     canvas
@@ -19,17 +20,18 @@ export class TerrainLayer extends Layer {
 
     override render(frameState: FrameState | null) {
         if (!frameState) return null
-        console.log(frameState.extent, frameState.viewState.projection.getCode())
+        
         this.canvas.width = frameState.size[0]
         this.canvas.height = frameState.size[1]
+        
         return this.draw(frameState.extent!)
     }
 
     static async from() {
         const canvas = document.createElement("canvas")
         const g = await initCanvas({
-            vertShader: shader,
-            fragShader: shader,
+            vertShader,
+            fragShader,
             canvas,
             layout: {
                 colorMap: { uniform:
