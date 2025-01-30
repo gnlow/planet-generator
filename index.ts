@@ -50,10 +50,10 @@ min: number, max: number, isInt = false) =>
             </h>
             <input
                 type="range"
+                step=${isInt ? 1 : 0.01}
                 value=${terrain[name]}
                 min=${min}
                 max=${max}
-                step=${isInt ? 1 : 0.01}
                 @input=${u(v => terrain[name] = v)}
             />
         <v/>
