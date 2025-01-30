@@ -39,15 +39,30 @@ import { html, render } from "https://esm.sh/lit-html@3.2.1"
 const slider =
 (name: "DD1" | "DD2" | "POWA" | "POW", min: number, max: number) =>
     html`
-        <input
-            type="range"
-            value=${terrain[name]}
-            min=${min}
-            max=${max}
-            step=0.01
-            @input=${u(v => terrain[name] = v)}
-        />
-        ${terrain[name]}
+        <style>
+            v {
+                display: flex;
+                flex-direction: column;
+            }
+            h {
+                display: flex;
+                flex-direction: row;
+            }
+        </style>
+        <v>
+            <h>
+                ${name}
+                ${terrain[name].toFixed(2)}
+            </h>
+            <input
+                type="range"
+                value=${terrain[name]}
+                min=${min}
+                max=${max}
+                step=0.01
+                @input=${u(v => terrain[name] = v)}
+            />
+        <v/>
     `
 
 const u =
@@ -56,10 +71,10 @@ const u =
     f && f(Number((e!.target as HTMLInputElement).value)!)
     refresh()
     render(html`
-        <style>
-            input { width: 50% }
-        </style>
         ${slider("DD1", -1, 1)}
+        ${slider("DD2", -1, 1)}
+        ${slider("POWA", 0, 10)}
+        ${slider("POW", 0, 10)}
     `, document.body)
 }
 u()()
