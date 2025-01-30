@@ -24,7 +24,7 @@ new Map({
 })
 
 const refresh = () => {
-    console.log("refresh", terrain.DD1)
+    console.log("refresh")
     backLayer.setSource(new TerrainTile(terrain))
     const src = backLayer.getSource()!
     src.on("tileloadend", (e) => {
@@ -37,21 +37,23 @@ const refresh = () => {
 import { html, render } from "https://esm.sh/lit-html@3.2.1"
 
 const slider =
-(name: "DD1" | "DD2" | "POWA" | "POW", min: number, max: number) =>
+(name: "DD1" | "DD2" | "POWA" | "POW" | "MUL" | "ADD" | "SEED",
+min: number, max: number, isInt = false) =>
     html`
-        <style>
-        </style>
-        <v>
+        <v style="height: 27px;">
             <h>
                 <i><b>${name.padEnd(4, "\u00a0")}</b></i>
-                ${terrain[name].toFixed(2).padStart(5, "\u00a0")}
+                ${isInt
+                    ? terrain[name].toString().padStart(5, "0").padStart(6, "\u00a0")
+                    : terrain[name].toFixed(2).padStart(5, "\u00a0")
+                }
             </h>
             <input
                 type="range"
                 value=${terrain[name]}
                 min=${min}
                 max=${max}
-                step=0.01
+                step=${isInt ? 1 : 0.01}
                 @input=${u(v => terrain[name] = v)}
             />
         <v/>
@@ -63,6 +65,16 @@ const u =
     f && f(Number((e!.target as HTMLInputElement).value)!)
     refresh()
     render(html`
+        <h gap-20>
+            <v fill gap-10>
+                <h2 style="height: 27px;"><i>Tweak</i></h2>
+                ${slider("SEED", 0, 99999, true)}
+            </v>
+            <v fill gap-10>
+                ${slider("MUL", 0, 10)}
+                ${slider("ADD", -2, 2)}
+            </v>
+        </h>
         <h gap-20>
             <v fill gap-10>
                 ${slider("DD1", -1, 1)}

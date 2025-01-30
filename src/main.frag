@@ -32,7 +32,7 @@ fn longestEdge(vs: array<Vertex, 4>) -> array<u32, 2> {
 }
 
 fn rand2(a: f32, b: f32) -> f32 {
-    return 2*fract((a+3.141)*(b+3.141)*(100+f32(gSeed)/100))-1;
+    return 2*fract((a+3.141)*(b+3.141)*(100+f32(SEED)/100))-1;
 }
 
 fn makeVertex(v: vec3f, seed: f32) -> Vertex {
@@ -148,5 +148,5 @@ fn fragment_main(@location(0) uv: vec2f) -> @location(0) vec4f {
         sin(lat),
     ), PI+7);
     //return vec4f(x/360, (y+90)/180, 0.0, 1.0);
-    return getColor(alti);
+    return getColor(alti * MUL + ADD);
 }
