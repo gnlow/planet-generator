@@ -51,8 +51,8 @@ fn offset(seed: f32, l_: f32, a1: f32, a2: f32) -> f32 {
     let seed2 = rand2(seed, seed);
 
     return (
-        seed * 0.6 * abs(a1-a2) +
-        seed2 * 0.2 * pow(l, 1.1)
+        seed * DD1 * pow(abs(a1-a2), POWA) +
+        seed2 * DD2 * pow(l, POW)
     );
 }
 
