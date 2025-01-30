@@ -7,6 +7,13 @@ import { TerrainRenderer } from "./src/TerrainRenderer.ts"
 import { TerrainTile } from "./src/TerrainTile.ts"
 
 const terrain = await TerrainRenderer.from()
+
+const updateState = () =>
+    terrain.state = location.hash
+
+updateState()
+terrain.state = location.hash
+
 const frontLayer = new TileLayer({ source: new TerrainTile(terrain) })
 const backLayer = new TileLayer({ source: new TerrainTile(terrain) })
 
@@ -51,10 +58,13 @@ min: number, max: number, isInt = false) =>
             <input
                 type="range"
                 step=${isInt ? 1 : 0.01}
-                value=${terrain[name]}
                 min=${min}
                 max=${max}
+                value=${terrain[name]}
                 @input=${u(v => terrain[name] = v)}
+                @change=${() => {
+                    history.pushState({}, "", terrain.state)
+                }}
             />
         <v/>
     `
@@ -99,3 +109,8 @@ const u =
     `, document.body)
 }
 u()()
+
+addEventListener("hashchange", () => {
+    updateState()
+    u()()
+})

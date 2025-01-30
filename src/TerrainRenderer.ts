@@ -27,6 +27,8 @@ const layout = {
     POW: { uniform: d.f32 },
 } satisfies Layout
 
+const props = ["SEED","MUL","ADD","DD1","DD2","POWA","POW"] as const
+
 export class TerrainRenderer {
     g?: Awaited<ReturnType<typeof initCanvas<typeof layout>>>
 
@@ -57,6 +59,18 @@ export class TerrainRenderer {
     _POW = 1.1
     set POW(v: number) { this.g!.buffers.POW.write(this._POW = v) }
     get POW() { return this._POW }
+
+    get state() {
+        return "#" + props
+            .map(k => this[k as keyof this])
+            .join("/")
+    }
+    set state(str: string) {
+        const data = str.replace("#", "").split("/")
+        props.forEach((k, i) => {
+            if (isFinite(Number(data[i]))) this[k] = Number(data[i])
+        })
+    }
 
     canvas!: HTMLCanvasElement
 
