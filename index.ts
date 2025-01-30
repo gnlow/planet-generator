@@ -1,13 +1,16 @@
 import {
     Map,
     View,
+    TileLayer,
 } from "./src/deps.ts"
-import { TerrainLayer } from "./src/TerrainLayer.ts"
+import { TerrainTile } from "./src/TerrainTile.ts"
 
-const map = new Map({
+new Map({
     target: "map",
     layers: [
-        await TerrainLayer.from()
+        new TileLayer({
+            source: await TerrainTile.from(),
+        }),
     ],
     view: new View({
         center: [0, 0],
