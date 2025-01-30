@@ -13,7 +13,7 @@
             font-family: "Space Mono", Consolas, monospace;
             background: rgb(107 185 200);
             --black: #335;
-            --white: #fff;
+            --white: #ddf;
             color: var(--black);
         }
         * {
@@ -30,9 +30,27 @@
         #map {
             width: 100%;
             aspect-ratio: 2;
-            border: 3px solid #fff;
+            border: 3px solid var(--white);
             border-radius: 10px;
             overflow: hidden;
+        }
+        v {
+            display: flex;
+            flex-direction: column;
+        }
+        h {
+            display: flex;
+            flex-direction: row;
+        }
+        [fill] {
+            width: 100%;
+            height: 100%;
+        }
+        [gap-10] {
+            gap: 10px;
+        }
+        [gap-20] {
+            gap: 20px;
         }
     </style>
     <link rel="stylesheet" href="static/range.css">

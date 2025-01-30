@@ -40,18 +40,10 @@ const slider =
 (name: "DD1" | "DD2" | "POWA" | "POW", min: number, max: number) =>
     html`
         <style>
-            v {
-                display: flex;
-                flex-direction: column;
-            }
-            h {
-                display: flex;
-                flex-direction: row;
-            }
         </style>
         <v>
             <h>
-                ${name.padEnd(4, "\u00a0")}
+                <i><b>${name.padEnd(4, "\u00a0")}</b></i>
                 ${terrain[name].toFixed(2).padStart(5, "\u00a0")}
             </h>
             <input
@@ -71,10 +63,16 @@ const u =
     f && f(Number((e!.target as HTMLInputElement).value)!)
     refresh()
     render(html`
-        ${slider("DD1", -1, 1)}
-        ${slider("DD2", -1, 1)}
-        ${slider("POWA", 0, 10)}
-        ${slider("POW", 0, 10)}
+        <h gap-20>
+            <v fill gap-10>
+                ${slider("DD1", -1, 1)}
+                ${slider("POWA", 0, 10)}
+            </v>
+            <v fill gap-10>
+                ${slider("DD2", -1, 1)}
+                ${slider("POW", 0, 10)}
+            </v>
+        </h>
     `, document.body)
 }
 u()()
