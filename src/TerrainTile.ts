@@ -27,6 +27,9 @@ export class TerrainTile extends ImageTile {
                         maxY: d.f32,
                     })
                 },
+                gSeed: { uniform:
+                    d.u32,
+                },
             },
         })
 
@@ -35,6 +38,7 @@ export class TerrainTile extends ImageTile {
                 d.vec3u(...lefebvre.get(i))
             )
         )
+        g.buffers.gSeed.write(0)
 
         return new TerrainTile({
             loader(z, x, y) {

@@ -32,7 +32,7 @@ fn longestEdge(vs: array<Vertex, 4>) -> array<u32, 2> {
 }
 
 fn rand2(a: f32, b: f32) -> f32 {
-    return fract((a+3.141)*(b+3.141)*100);
+    return 2*fract((a+3.141)*(b+3.141)*(100+f32(gSeed)/100))-1;
 }
 
 fn makeVertex(v: vec3f, seed: f32) -> Vertex {
@@ -48,12 +48,11 @@ fn offset(seed: f32, l_: f32, a1: f32, a2: f32) -> f32 {
     if (l > 1) {
         l = pow(l, 0.5);
     }
-    let seed1 = rand2(seed, 11.11);
-    let seed2 = rand2(seed, 22.22);
+    let seed2 = rand2(seed, seed);
 
     return (
-        seed1 * 0.25 * abs(a1-a2) +
-        seed2 * 0.17 * pow(l, 0.7)
+        seed * 0.6 * abs(a1-a2) +
+        seed2 * 0.2 * pow(l, 1.1)
     );
 }
 
