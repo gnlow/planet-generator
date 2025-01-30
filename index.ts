@@ -51,8 +51,8 @@ const slider =
         </style>
         <v>
             <h>
-                ${name}
-                ${terrain[name].toFixed(2)}
+                ${name.padEnd(4, "\u00a0")}
+                ${terrain[name].toFixed(2).padStart(5, "\u00a0")}
             </h>
             <input
                 type="range"

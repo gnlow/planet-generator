@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://esm.sh/ol@10.3.1/ol.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    </style>
+    <style>
         html, body {
             height: 100%;
+            font-family: "Space Mono", Consolas, monospace;
+            background: rgb(107 185 200);
+            --black: #335;
+            --white: #fff;
+            color: var(--black);
         }
         * {
             margin: 0;
@@ -22,11 +30,15 @@
         #map {
             width: 100%;
             aspect-ratio: 2;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            overflow: hidden;
         }
     </style>
+    <link rel="stylesheet" href="static/range.css">
 </head>
 <body>
-    <h1>Planet Generator</h1>
+    <h1><i>Planet Generator</i></h1>
     <div id="map"></div>
     <script type="module" src="./index.ts"></script>
 </body>
