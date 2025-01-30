@@ -65,6 +65,16 @@ const u =
     f && f(Number((e!.target as HTMLInputElement).value)!)
     refresh()
     render(html`
+    <style>
+        tweak {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 1000px;
+        }
+    </style>
+    <tweak>
         <h gap-20>
             <v fill gap-10>
                 <h2 style="height: 27px;"><i>Tweak</i></h2>
@@ -85,6 +95,7 @@ const u =
                 ${slider("POW", 0, 10)}
             </v>
         </h>
+    </tweak>
     `, document.body)
 }
 u()()
