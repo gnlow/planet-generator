@@ -123,7 +123,6 @@ export class TerrainRenderer {
             maxY: 90-u*y,
         })
         this.g.draw(4)
-        console.log(`rendered(${z}, ${x}, ${y})`)
         return this.canvas
     }
 }

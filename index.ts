@@ -51,12 +51,10 @@ view.on("change", e => {
 })
 
 const refresh = () => {
-    console.log("refresh")
     backLayer.setSource(new TerrainTile(terrain))
     const src = backLayer.getSource()!
     src.on("tileloadend", (e) => {
         const [z, x, y] = e.tile.tileCoord
-        console.log(`swap(${z}, ${x}, ${y})`)
         frontLayer.setSource(src)
     })
 }
