@@ -7,8 +7,44 @@ import {
 } from "./src/deps.ts"
 import { TerrainRenderer } from "./src/TerrainRenderer.ts"
 import { TerrainTile } from "./src/TerrainTile.ts"
+import { html, render } from "https://esm.sh/lit-html@3.2.1"
+
+const errors: Error[] = []
+
+const onError = (e: Error) => {
+    (document.body.querySelector("#map") as HTMLElement).style.display = "none"
+    errors.push(e)
+    render(html`<p>
+        <b>Info</b>:<br/>
+        Error occurred.<br/>
+        Sorry, It seems your browser is not supported.<br/>
+        This page was tested only on Chrome 134.<br/>
+        Firefox (including Nightly(136)) seems not working yet.<br/>
+        Or.. it's possibly just my mistake. You can write an issue on GitHub.<br/>
+        ---<br/>
+        <b>navigator.userAgent</b>: ${navigator.userAgent}<br/>
+        <b>import.meta.url</b>: ${import.meta.url}<br/>
+        <b>location.href</b>: ${location.href}<br/>
+        ---<br/>
+        ${
+            errors.map(e => html`
+                <b>${e.name}</b>: ${e.message}
+                <br/>
+            `)    
+        }
+    </p>`, document.body.querySelector("tweak") as HTMLElement)
+
+    throw e
+}
+
+try {
 
 const terrain = await TerrainRenderer.from()
+
+terrain.g!.root.device.addEventListener("uncapturederror", e => {
+    const error = (e as GPUUncapturedErrorEvent).error
+    onError(new Error(error.message))
+})
 
 const view = new View({
     center: [0, 0],
@@ -97,8 +133,6 @@ const refresh = () => {
     })
 }
 
-import { html, render } from "https://esm.sh/lit-html@3.2.1"
-
 const slider =
 (name: "DD1" | "DD2" | "POWA" | "POW" | "MUL" | "ADD" | "SEED",
 min: number, max: number, isInt = false) =>
@@ -157,3 +191,11 @@ addEventListener("hashchange", () => {
     pullState()
     u()()
 })
+
+} catch(e) {
+    if (e instanceof Error) {
+        onError(e)
+    } else {
+        onError(new Error(String(e)))
+    }
+}
