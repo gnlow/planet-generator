@@ -8,26 +8,46 @@ import { TerrainTile } from "./src/TerrainTile.ts"
 
 const terrain = await TerrainRenderer.from()
 
-const updateState = () =>
-    terrain.state = location.hash
+const view = new View({
+    center: [0, 0],
+    zoom: 1,
+    projection: "EPSG:4326",
+})
 
-updateState()
-terrain.state = location.hash
+const pushState = () => {
+    history.pushState(
+        {},
+        "",
+        terrain.state + "/" +
+        [...view.getCenter()!, view.getZoom()!]
+            .map(x => x.toFixed(2))
+            .join("/")
+    )
+}
+
+const pullState = () => {
+    terrain.state = location.hash
+    const [x, y, zoom] = location.hash.split("/").slice(-3).map(Number)
+    view.setCenter([x, y])
+    view.setZoom(zoom)
+}
+
+pullState()
 
 const frontLayer = new TileLayer({ source: new TerrainTile(terrain) })
 const backLayer = new TileLayer({ source: new TerrainTile(terrain) })
 
-new Map({
+const map = new Map({
     target: "map",
     layers: [
         frontLayer,
         backLayer,
     ],
-    view: new View({
-        center: [0, 0],
-        zoom: 1,
-        projection: "EPSG:4326",
-    })
+    view,
+})
+
+view.on("change", e => {
+    pushState()
 })
 
 const refresh = () => {
@@ -62,9 +82,7 @@ min: number, max: number, isInt = false) =>
                 max=${max}
                 value=${terrain[name]}
                 @input=${u(v => terrain[name] = v)}
-                @change=${() => {
-                    history.pushState({}, "", terrain.state)
-                }}
+                @change=${pushState}
             />
         <v/>
     `
@@ -111,6 +129,6 @@ const u =
 u()()
 
 addEventListener("hashchange", () => {
-    updateState()
+    pullState()
     u()()
 })
