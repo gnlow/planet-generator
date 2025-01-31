@@ -61,6 +61,7 @@
         h1 {
             width: 100%;
             margin-bottom: -5px;
+            line-height: 1;
         }
         .ol-control button {
             background: var(--white);
@@ -70,7 +71,15 @@
     <link rel="stylesheet" href="static/range.css">
 </head>
 <body>
-    <h1><i>Planet Generator</i></h1>
+    <h gap-20 style="
+        width: 100%;
+        align-items: baseline;
+    ">
+        <h1><i>Planet Generator</i></h1>
+        <a href="https://github.com/gnlow/planet-generator" target="_blank" rel="noopener noreferrer">
+            <img src="static/github.svg" height="24px">
+        </a>
+    </h>
     <div id="map"></div>
     <script type="module" src="./index.ts"></script>
 </body>
