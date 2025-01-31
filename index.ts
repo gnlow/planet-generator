@@ -14,26 +14,6 @@ const view = new View({
     projection: "EPSG:4326",
 })
 
-const pushState = () => {
-    history.pushState(
-        {},
-        "",
-        terrain.state + "/" +
-        [...view.getCenter()!, view.getZoom()!]
-            .map(x => x.toFixed(2))
-            .join("/")
-    )
-}
-
-const pullState = () => {
-    terrain.state = location.hash
-    const [x, y, zoom] = location.hash.split("/").slice(-3).map(Number)
-    view.setCenter([x, y])
-    view.setZoom(zoom)
-}
-
-pullState()
-
 const frontLayer = new TileLayer({ source: new TerrainTile(terrain) })
 const backLayer = new TileLayer({ source: new TerrainTile(terrain) })
 
@@ -46,15 +26,58 @@ const map = new Map({
     view,
 })
 
-view.on("change", e => {
+const getViewHeight = () => {
+    const [ x0, y0, x1, y1 ] = view.getViewStateAndExtent().extent
+    const [w, h] = [ x1-x0, y1-y0 ]
+    return Math.min(w / 2, h)
+}
+
+const setViewHeight =
+(h: number, [x, y]: number[]) => {
+    const w = h * 2
+    view.fit([
+        x-w/2,
+        y-h/2,
+        x+w/2,
+        y+h/2,
+    ])
+}
+
+const pushState = () => {
+    history.pushState(
+        {},
+        "",
+        terrain.state + "/" +
+        [...view.getCenter()!, getViewHeight()]
+            .map(x => x.toFixed(2))
+            .join("/")
+    )
+}
+
+const pullState = () => {
+    terrain.state = location.hash
+    let [_seed, _mul, _add, _dd1, _dd2, _powa, _pow,
+        x, y, h] = location.hash.split("/").map(Number)
+    x ||= 0
+    y ||= 0
+    h ||= 180
+    view.setCenter([x, y])
+    setViewHeight(h, [x, y])
+}
+
+pullState()
+
+view.on("change", () => {
+    pushState()
+})
+map.on("change:size", () => {
     pushState()
 })
 
 const refresh = () => {
     backLayer.setSource(new TerrainTile(terrain))
     const src = backLayer.getSource()!
-    src.on("tileloadend", (e) => {
-        const [z, x, y] = e.tile.tileCoord
+    src.on("tileloadend", () => {
         frontLayer.setSource(src)
     })
 }
