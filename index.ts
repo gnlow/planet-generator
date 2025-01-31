@@ -2,6 +2,8 @@ import {
     Map,
     View,
     TileLayer,
+    defaultControls,
+    FullScreen,
 } from "./src/deps.ts"
 import { TerrainRenderer } from "./src/TerrainRenderer.ts"
 import { TerrainTile } from "./src/TerrainTile.ts"
@@ -17,13 +19,26 @@ const view = new View({
 const frontLayer = new TileLayer({ source: new TerrainTile(terrain) })
 const backLayer = new TileLayer({ source: new TerrainTile(terrain) })
 
+const fullScreen = new FullScreen()
+
 const map = new Map({
+    controls: defaultControls().extend([
+        fullScreen,
+    ]),
     target: "map",
     layers: [
         frontLayer,
         backLayer,
     ],
     view,
+})
+
+fullScreen.on("enterfullscreen", () => {
+    map.getTargetElement().classList.add("full")
+})
+
+fullScreen.on("leavefullscreen", () => {
+    map.getTargetElement().classList.remove("full")
 })
 
 const getViewHeight = () => {
