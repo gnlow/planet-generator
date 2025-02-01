@@ -2,11 +2,10 @@
 
 Based on [_Planet Generator_](http://hjemmesider.diku.dk/~torbenm/Planet/) by Torben Mogensen
 
+> [!NOTE]
+> Rendered result can be differ (dramatically) upon devices, even if every parameter is same.
+
 ![screenshot](./static/screenshot.png)
-
-## Caution
-
-Rendered result can be differ (dramatically) upon devices, even if every parameter is same.
 
 ## How It Works?
 
