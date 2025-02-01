@@ -168,6 +168,10 @@ min: number, max: number, isInt = false) =>
                     }
                     @input=${(e: InputEvent) => {
                         const el = e.target as HTMLInputElement
+                        if (isInt) {
+                            el.value = Number(el.value).toString()
+                            .padStart(5, "0")
+                        }
                         if (el.value.length > 5) {
                             el.value = el.value.slice(0, 5)
                         }
