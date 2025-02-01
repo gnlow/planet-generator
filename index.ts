@@ -18,6 +18,7 @@ const onError = (e: Error) => {
         <b>Info</b>:<br/>
         Error occurred.<br/>
         Sorry, It seems your browser is not supported.<br/>
+        You need a browser that supports WebGPU.<br/>
         This page was tested only on Chrome 134.<br/>
         Firefox (including Nightly(136)) seems not working yet.<br/>
         Or.. it's possibly just my mistake. You can write an issue on GitHub.<br/>
