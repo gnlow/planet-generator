@@ -1,3 +1,4 @@
+import { F } from "https://esm.sh/typegpu@0.3.2/index-BM7ZTN7E.d.ts";
 import {
     Map,
     View,
@@ -8,6 +9,7 @@ import {
 import { TerrainRenderer } from "./src/TerrainRenderer.ts"
 import { TerrainTile } from "./src/TerrainTile.ts"
 import { html, render } from "https://esm.sh/lit-html@3.2.1"
+import { styleMap } from "https://esm.sh/lit-html@3.2.1/directives/style-map"
 
 const errors: Error[] = []
 
@@ -142,16 +144,50 @@ min: number, max: number, isInt = false) =>
             <h>
                 <i><b>${name.padEnd(4, "\u00a0")}</b></i>
                 ${isInt
-                    ? terrain[name].toString().padStart(5, "0").padStart(6, "\u00a0")
-                    : terrain[name].toFixed(2).padStart(5, "\u00a0")
+                    ? terrain[name].toString()
+                        .padStart(5, "0")
+                        .padStart(6, "\u00a0")
+                        .slice(0, -terrain[name].toString().length)
+                    : terrain[name].toFixed(2)
+                        .padStart(5, "\u00a0")
+                        .slice(0, -terrain[name].toFixed(2).length)
                 }
+                <input
+                    type="number"
+                    step=${isInt ? 1 : 0.01}
+                    min=${min}
+                    max=${max}
+                    name=${name}
+                    .value=${isInt
+                        ? terrain[name]
+                        : terrain[name].toFixed(2)
+                    }
+                    @input=${(e: InputEvent) => {
+                        const el = e.target as HTMLInputElement
+                        u(v => {
+                            console.log(v)
+                            if (v < min || max < v)
+                                el.value = isInt
+                                    ? terrain[name].toFixed(0)
+                                    : terrain[name].toFixed(2)
+                            else terrain[name] = v
+                        })(e)
+                    }}
+                    @change=${pushState}
+                    style=${styleMap({
+                        width: `${isInt
+                            ? terrain[name].toString().length + 2
+                            : 7
+                        }ch`
+                    })}
+                />
             </h>
             <input
                 type="range"
                 step=${isInt ? 1 : 0.01}
                 min=${min}
                 max=${max}
-                value=${terrain[name]}
+                .value=${terrain[name]}
                 @input=${u(v => terrain[name] = v)}
                 @change=${pushState}
             />
