@@ -121,12 +121,18 @@ const pullState = () => {
 
 pullState()
 
-view.on("change", () => {
-    pushState()
-})
-map.on("change:size", () => {
-    pushState()
-})
+const debounce =
+(t: number) =>
+<T extends unknown[]>
+(f: (...args: T) => void) => {
+    let timer: number | undefined = undefined
+    return (...args: T) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => f(...args), t)
+    }
+}
+
+map.on("moveend", debounce(300)(pushState))
 
 const refresh = () => {
     backLayer.setSource(new TerrainTile(terrain))
