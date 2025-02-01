@@ -1,4 +1,4 @@
-# planet-generator
+# planet-generator-w
 
 Based on [_Planet Generator_](http://hjemmesider.diku.dk/~torbenm/Planet/) by Torben Mogensen
 
