@@ -144,10 +144,7 @@ min: number, max: number, isInt = false) =>
             <h>
                 <i><b>${name.padEnd(4, "\u00a0")}</b></i>
                 ${isInt
-                    ? terrain[name].toString()
-                        .padStart(5, "0")
-                        .padStart(6, "\u00a0")
-                        .slice(0, -terrain[name].toString().length)
+                    ? "\u00a0"
                     : terrain[name].toFixed(2)
                         .padStart(5, "\u00a0")
                         .slice(0, -terrain[name].toFixed(2).length)
@@ -159,25 +156,33 @@ min: number, max: number, isInt = false) =>
                     max=${max}
                     name=${name}
                     .value=${isInt
-                        ? terrain[name]
+                        ? terrain[name].toString()
+                            .padStart(5, "0")
                         : terrain[name].toFixed(2)
                     }
                     @input=${(e: InputEvent) => {
                         const el = e.target as HTMLInputElement
-                        u(v => {
-                            console.log(v)
-                            if (v < min || max < v)
-                                el.value = isInt
-                                    ? terrain[name].toFixed(0)
-                                    : terrain[name].toFixed(2)
-                            else terrain[name] = v
-                        })(e)
+                        if (el.value.length > 5) {
+                            el.value = el.value.slice(0, 5)
+                        }
                     }}
-                    @change=${pushState}
+                    @change=${(e: InputEvent) => {
+                        const el = e.target as HTMLInputElement
+                        u(v => {
+                            if (!(v < min || max < v))
+                                terrain[name] = v
+                        })(e)
+                        el.value = isInt
+                            ? terrain[name].toString()
+                                .padStart(5, "0")
+                            : terrain[name].toFixed(2)
+                        console.log(el.value)
+                        pushState()
+                    }}
                     style=${styleMap({
                         width: `${isInt
-                            ? terrain[name].toString().length + 2
-                            : 7
+                            ? 7
+                            : terrain[name].toFixed(2).length + 3
                         }ch`
                     })}
                 />
